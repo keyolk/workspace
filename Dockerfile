@@ -61,7 +61,7 @@ RUN pacman -Sy --noconfirm nodejs npm
 # ruby
 RUN pacman -Sy --noconfirm ruby
 
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq
 
 RUN pacman -Sy --noconfirm tmux
 
@@ -70,16 +70,27 @@ RUN pacman -Sy --noconfirm neovim \
   && pip2 install neovim
 
 RUN pacman -Sy --noconfirm fish
+RUN pacman -Sy --noconfirm docker
+RUN pacman -Sy --noconfirm terraform
+RUN pacman -Sy --noconfirm ansible
+RUN pacman -Sy --noconfirm parallel
+
+RUN ln -sf /home /home1
 
 ENV USER irteam
 
 RUN groupadd -g 500 irteam \
   && useradd -u 500 -g 500 -m $USER \
-  && echo "$USER:$USER" | chpasswd && \
-  usermod -a -G wheel $USER && \
-  echo "$USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+  && echo "$USER:$USER" | chpasswd \
+  && usermod -a -G wheel $USER \
+  && echo "$USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-RUN pacman -Sy --noconfirm docker
+RUN pacman -Sy --noconfirm tcpdump wireshark-cli \
+  && groupadd wireshark \
+  && usermod -a -G wireshark $USER \
+  && setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap \
+  && chgrp wireshark /usr/bin/dumpcap \
+  && chmod 750 /usr/bin/dumpcap
 
 USER $USER
 WORKDIR /home/$USER
@@ -89,6 +100,7 @@ RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin
 RUN cat ~/.config/fish/fishfile
 
 RUN nvim +PlugInstall +qa || true
+RUN nvim +UpdateRemotePlugins +qa || true
 RUN nvim +GoInstallBinaries +qa || true
 
-CMD fish
+CMD tmux
