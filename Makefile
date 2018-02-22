@@ -8,8 +8,10 @@ build: ## build
 build/nocache: ## build
 	docker build --no-cache -t $(IMAGE) .
 
+work/clean: ## clean work env
+	docker rm -f keyolk-work
+
 work/run: ## run work env
-	-docker rm --force keyolk-work
 	docker run -ti \
 		--cap-add NET_ADMIN \
 		--cap-add NET_RAW \
