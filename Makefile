@@ -25,6 +25,7 @@ work/run: ## run work env
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v /var/run/nscd:/var/run/nscd \
 		-v $$HOME/.ssh:/home/irteam/.ssh \
+		-v $$HOME/.docker:/home/irteam/.docker \
 		-v $$(readlink $$HOME/work):/home/irteam/work \
 		-v $$(readlink $$HOME/work)/dockerfiles/workspace:/home/irteam/env \
 		-v $$(readlink $$HOME/work)/wiki:/home/irteam/wiki \

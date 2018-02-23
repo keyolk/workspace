@@ -95,6 +95,8 @@ RUN pacman -Sy --noconfirm tcpdump wireshark-cli \
 USER $USER
 WORKDIR /home/$USER
 
+ENV GOPATH ~/.local/go
+
 RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin/config-clone | sh 
 
 RUN cat ~/.config/fish/fishfile
@@ -102,5 +104,6 @@ RUN cat ~/.config/fish/fishfile
 RUN nvim +PlugInstall +qa || true
 RUN nvim +UpdateRemotePlugins +qa || true
 RUN nvim +GoInstallBinaries +qa || true
+RUN go get github.com/knqyf263/pet
 
 CMD tmux
