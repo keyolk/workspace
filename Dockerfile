@@ -1,11 +1,6 @@
 FROM base/archlinux
 MAINTAINER Chanhun Jeong "chanhun.jeong@navercorp.com"
 
-# Refresh the keyring
-#RUN pacman-key --init \
-# && pacman-key --populate archlinux \
-# && pacman-key --refresh-keys
-
 # Optimise the mirror list
 RUN pacman --noconfirm -Syyu \
  && pacman-db-upgrade \
@@ -73,6 +68,7 @@ RUN pacman -Sy --noconfirm fish
 RUN pacman -Sy --noconfirm docker
 RUN pacman -Sy --noconfirm terraform
 RUN pacman -Sy --noconfirm ansible
+RUN pacman -Sy --noconfirm vagrant
 RUN pacman -Sy --noconfirm parallel
 
 RUN ln -sf /home /home1
@@ -104,7 +100,11 @@ RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin
 RUN nvim +PlugInstall +qa || true
 RUN nvim +UpdateRemotePlugins +qa || true
 RUN nvim +GoInstallBinaries +qa || true
+
 RUN go get github.com/knqyf263/pet
+RUN go get github.com/mantl/consul-cli
+RUN go get github.com/gohugo/hugo
+
 RUN cat ~/.config/fish/fishfile
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
 
