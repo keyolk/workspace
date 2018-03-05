@@ -4,7 +4,6 @@ IMAGE=keyolk
 
 build: ## build
 	docker build -t $(IMAGE) .
-
 build/nocache: ## build
 	docker build --no-cache -t $(IMAGE) .
 
@@ -16,6 +15,7 @@ work/run: ## run work env
 		--cap-add NET_ADMIN \
 		--cap-add NET_RAW \
 		--cap-add SYS_ADMIN \
+		-e REMOTE_USER=keyolk \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
@@ -42,7 +42,7 @@ test/docker/run: ## run test env
 	docker run -ti \
 		--name keyolk-test-docker \
 		-v /naver:/naver \
-		-v $$GOPATH/src/github.com/docker/docker-ce/components/engine/bundles/binary-daemon:/usr/local/bin \
+		-v /naver/work/keyolk/cocofarm/docker-ce/components/engine/bundles/binary-daemon:/usr/local/bin \
 		--userns host \
 		--privileged \
 		-u root \
@@ -51,3 +51,6 @@ test/docker/run: ## run test env
 
 test/docker/attach: ## attach to test env
 	docker attach keyolk-test-docker
+
+test/docker/sh: ## attach to test env
+	docker exec -ti keyolk-test-docker bash

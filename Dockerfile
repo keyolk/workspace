@@ -56,7 +56,7 @@ RUN pacman -Sy --noconfirm nodejs npm
 # ruby
 RUN pacman -Sy --noconfirm ruby
 
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq openbsd-netcat cmake
 
 RUN pacman -Sy --noconfirm tmux
 
