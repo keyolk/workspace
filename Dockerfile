@@ -73,25 +73,27 @@ RUN pacman -Sy --noconfirm parallel
 
 RUN ln -sf /home /home1
 
-ENV USER irteam
+ARG user 
+ARG gid
+ARG uid
 
-RUN groupadd -g 500 irteam \
-  && useradd -u 500 -g 500 -m $USER \
-  && echo "$USER:$USER" | chpasswd \
-  && usermod -a -G wheel $USER \
-  && echo "$USER ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+RUN groupadd -g $gid $user \
+  && useradd -u $uid -g $gid -m $user \
+  && echo "$user:$user" | chpasswd \
+  && usermod -a -G wheel $user \
+  && echo "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN pacman -Sy --noconfirm tcpdump wireshark-cli \
   && groupadd wireshark \
-  && usermod -a -G wireshark $USER \
+  && usermod -a -G wireshark $user \
   && setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap \
   && chgrp wireshark /usr/bin/dumpcap \
   && chmod 750 /usr/bin/dumpcap
 
-USER $USER
-WORKDIR /home/$USER
+USER $user
+WORKDIR /home/$user
 
-ENV HOME /home/$USER
+ENV HOME /home/$user
 ENV GOPATH $HOME/.local/go
 ENV SHELL /usr/bin/fish
 
@@ -103,7 +105,7 @@ RUN nvim +GoInstallBinaries +qa || true
 
 RUN go get github.com/knqyf263/pet
 RUN go get github.com/mantl/consul-cli
-RUN go get github.com/gohugo/hugo
+RUN go get github.com/gohugoio/hugo
 
 RUN cat ~/.config/fish/fishfile
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"

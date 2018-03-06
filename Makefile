@@ -3,9 +3,9 @@ include makefiles/*.mk
 IMAGE=keyolk
 
 build: ## build
-	docker build -t $(IMAGE) .
+	docker build -t $(IMAGE) --build-arg user=irteam --build-arg gid=500 --build-arg uid=500 .
 build/nocache: ## build
-	docker build --no-cache -t $(IMAGE) .
+	docker build -t $(IMAGE) --build-arg user=irteam --build-arg gid=500 --build-arg uid=500 --no-cache .
 
 work/clean: ## clean work env
 	docker rm -f keyolk-work
