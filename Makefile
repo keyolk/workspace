@@ -10,12 +10,13 @@ build/nocache: ## build
 work/clean: ## clean work env
 	docker rm -f keyolk-work
 
-work/run: ## run work env
-	docker run -ti \
+work/create:
+	docker run -tid \
 		--cap-add NET_ADMIN \
 		--cap-add NET_RAW \
 		--cap-add SYS_ADMIN \
 		-e REMOTE_USER=keyolk \
+		-e DOCKER_PREFIX=/naver/work/keyolk/cocofarm/docker-pool \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
@@ -24,15 +25,17 @@ work/run: ## run work env
 		-v /naver:/naver \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v /var/run/nscd:/var/run/nscd \
-		-v $$HOME/.ssh:/home/irteam/.ssh \
-		-v $$HOME/.docker:/home/irteam/.docker \
-		-v $$(readlink $$HOME/work):/home/irteam/work \
-		-v $$(readlink $$HOME/work)/dockerfiles/workspace:/home/irteam/env \
-		-v $$(readlink $$HOME/work)/wiki:/home/irteam/wiki \
-		-v $$HOME/.local/share:/home/irteam/.local/share \
-		-v $$HOME/.local/bin:/home/irteam/.local/bin \
 		--name keyolk-work \
 		$(IMAGE)
+
+work/run: work/create ## run work env
+	docker exec -ti keyolk-work rm /home/irteam/.local/share/fish/fish_history
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/local/share/fish/fish_history /home/irteam/.local/share/fish/fish_history
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/docker /home/irteam/.docker
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/ssh /home/irteam/.ssh
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/dockerfiles/workspace /home/irteam/env
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/wiki /home/irteam/wiki
+	docker exec -ti keyolk-work ln -sf /naver/work/keyolk /home/irteam/work
 
 work/attach: ## attach to work env
 	docker attach keyolk-work
