@@ -41,6 +41,7 @@ RUN echo "ko_KR.UTF-8 UTF-8" >  /etc/locale.gen \
  && echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 
 ENV LANG=en_US.UTF-8
+RUN cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 # clang
 RUN pacman -Sy --noconfirm clang
