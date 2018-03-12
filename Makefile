@@ -29,13 +29,7 @@ work/create:
 		$(IMAGE)
 
 work/run: work/create ## run work env
-	docker exec -ti keyolk-work rm /home/irteam/.local/share/fish/fish_history
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/local/share/fish/fish_history /home/irteam/.local/share/fish/fish_history
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/docker /home/irteam/.docker
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/local/ssh /home/irteam/.ssh
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/dockerfiles/workspace /home/irteam/env
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk/wiki /home/irteam/wiki
-	docker exec -ti keyolk-work ln -sf /naver/work/keyolk /home/irteam/work
+	@docker exec -ti keyolk-work bash -c "/naver/work/keyolk/local/init.sh"
 
 work/attach: ## attach to work env
 	docker attach keyolk-work
