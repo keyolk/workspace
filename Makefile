@@ -16,7 +16,6 @@ work/create:
 		--cap-add NET_RAW \
 		--cap-add SYS_ADMIN \
 		-e REMOTE_USER=keyolk \
-		-e DOCKER_PREFIX=/naver/work/keyolk/cocofarm/docker-pool \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
