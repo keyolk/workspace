@@ -45,8 +45,27 @@ test/docker/run: ## run test env
 		-w /root \
 		$(IMAGE) dockerd
 
+test/dockersub/run: ## run test env
+	-docker rm --force keyolk-test-docker-sub
+	docker run -ti \
+		--name keyolk-test-docker-sub \
+		-v /naver:/naver \
+		-v /naver/work/keyolk/cocofarm/docker-ce/components/engine/bundles/binary-daemon:/usr/local/bin \
+		--userns host \
+		--privileged \
+		--link keyolk-test-docker \
+		-u root \
+		-w /root \
+		$(IMAGE) dockerd
+
 test/docker/attach: ## attach to test env
 	docker attach keyolk-test-docker
 
+test/dockersub/attach: ## attach to test env
+	docker attach keyolk-test-docker-sub
+
 test/docker/sh: ## attach to test env
 	docker exec -ti keyolk-test-docker bash
+
+test/dockersub/sh: ## attach to test env
+	docker exec -ti keyolk-test-docker-sub bash
