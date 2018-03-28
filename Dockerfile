@@ -41,7 +41,9 @@ RUN echo "ko_KR.UTF-8 UTF-8" >  /etc/locale.gen \
  && echo "LANG=en_US.UTF-8" >> /etc/locale.conf
 
 ENV LANG=en_US.UTF-8
-RUN cp /usr/share/zoneinfo/Asia/Seoul /etc/localtime
+
+# Set timezone
+RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 # clang
 RUN pacman -Sy --noconfirm clang
@@ -96,7 +98,8 @@ USER $user
 WORKDIR /home/$user
 
 ENV HOME /home/$user
-ENV GOPATH $HOME/.local/go
+ENV GOROOT /usr/lib/go
+ENV GOPATH $GOPATH
 ENV SHELL /usr/bin/fish
 
 RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin/config-clone | sh 
