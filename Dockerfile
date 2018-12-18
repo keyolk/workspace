@@ -45,6 +45,9 @@ ENV LANG=en_US.UTF-8
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
+# llvm
+RUN pacman -Sy --noconfirm llvm
+
 # clang
 RUN pacman -Sy --noconfirm clang
 
@@ -74,6 +77,7 @@ RUN pacman -Sy --noconfirm terraform
 RUN pacman -Sy --noconfirm ansible
 RUN pacman -Sy --noconfirm vagrant
 RUN pacman -Sy --noconfirm parallel
+RUN pacman -Sy --noconfirm perl-libwww
 
 RUN ln -sf /home /home1
 
@@ -109,8 +113,8 @@ RUN nvim +UpdateRemotePlugins +qa || true
 RUN nvim +GoInstallBinaries +qa || true
 
 RUN go get github.com/knqyf263/pet
-RUN go get github.com/mantl/consul-cli
 RUN go get github.com/gohugoio/hugo
+RUN go get golang.org/x/tools/cmd/godoc
 
 RUN cat ~/.config/fish/fishfile
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
