@@ -1,5 +1,3 @@
-include makefiles/*.mk
-
 IMAGE=keyolk
 
 build: ## build
