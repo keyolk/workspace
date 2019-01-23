@@ -78,13 +78,15 @@ WORKDIR /home/$user
 
 ENV HOME /home/$user
 ENV GOROOT /usr/lib/go
-ENV GOPATH $GOPATH
+ENV GOPATH $HOME/.go
 ENV SHELL /usr/bin/fish
+ENV EDITOR /usr/bin/nvim
 
 # Install yay for AUR
 RUN git clone https://aur.archlinux.org/yay.git \
   && cd yay \
-  && makepkg -si --noconfirm
+  && makepkg -si --noconfirm \
+  && rm -rf ~/yay
 
 # install bcc
 RUN yay -Sy --noconfirm bcc bcc-tools python-bcc python2-bcc
