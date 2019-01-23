@@ -26,10 +26,12 @@ run:
 		-v /naver:/naver \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v /var/run/nscd:/var/run/nscd \
+		-v /lib/modules:/lib/modules \
 		--name $(CONTAINER) \
 		$(IMAGE)
 
 attach: ## attach to work env
+	-docker start $(CONTAINER)
 	docker attach $(CONTAINER)
 
 help: ## This help

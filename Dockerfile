@@ -100,4 +100,4 @@ RUN go get golang.org/x/tools/cmd/godoc
 
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
 
-CMD fish
+CMD tmux
