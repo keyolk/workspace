@@ -10,9 +10,9 @@ work/clean: ## clean work env
 
 work/create:
 	docker run -tid \
-		--cap-add NET_ADMIN \
-		--cap-add NET_RAW \
-		--cap-add SYS_ADMIN \
+		--privileged \
+		--pid=host \
+		--net=host \
 		-e REMOTE_USER=keyolk \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \

@@ -1,18 +1,16 @@
-FROM base/archlinux
+FROM base/archlinux AS base
 MAINTAINER Chanhun Jeong "chanhun.jeong@navercorp.com"
 
 # Optimise the mirror list
 RUN pacman --noconfirm -Syyu \
- && pacman-db-upgrade \
- && pacman --noconfirm -S reflector rsync \
- && reflector -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist \
- && pacman -Rsn --noconfirm reflector python rsync
-
- # Update system
-RUN pacman -Su --noconfirm
+  && pacman-db-upgrade \
+  && pacman --noconfirm -S reflector rsync \
+  && reflector -l 200 -p https --sort rate --save /etc/pacman.d/mirrorlist \
+  && pacman -Rsn --noconfirm reflector python rsync
 
 # Update db
-RUN pacman-db-upgrade
+RUN pacman -Su --noconfirm \
+  && pacman-db-upgrade
 
 # Remove orphaned packages
 RUN if [ ! -z "$(pacman -Qtdq)" ]; then \
@@ -21,9 +19,6 @@ RUN if [ ! -z "$(pacman -Qtdq)" ]; then \
 
 # Clear pacman caches
 RUN yes | pacman --noconfirm -Scc
-
-# Optimise pacman database
-RUN pacman-optimize --nocolor
 
 # Housekeeping
 RUN rm -f /etc/pacman.d/mirrorlist.pacnew \
@@ -45,25 +40,13 @@ ENV LANG=en_US.UTF-8
 # Set timezone
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
-# llvm
-RUN pacman -Sy --noconfirm llvm
+FROM base
 
-# clang
-RUN pacman -Sy --noconfirm clang
+# languages
+RUN pacman -Sy --noconfirm llvm clang go python python-pip python2 python2-pip nodejs npm ruby
 
-# golang
-RUN pacman -Sy --noconfirm go
-
-# python
-RUN pacman -Sy --noconfirm python python-pip python2 python2-pip 
-
-# javascript
-RUN pacman -Sy --noconfirm nodejs npm
-
-# ruby
-RUN pacman -Sy --noconfirm ruby
-
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools
+# common tools
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr
 
 RUN pacman -Sy --noconfirm tmux
 
@@ -81,7 +64,7 @@ RUN pacman -Sy --noconfirm perl-libwww
 
 RUN ln -sf /home /home1
 
-ARG user 
+ARG user
 ARG gid
 ARG uid
 
@@ -110,13 +93,11 @@ RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin
 
 RUN nvim +PlugInstall +qa || true
 RUN nvim +UpdateRemotePlugins +qa || true
-RUN nvim +GoInstallBinaries +qa || true
 
 RUN go get github.com/knqyf263/pet
 RUN go get github.com/gohugoio/hugo
 RUN go get golang.org/x/tools/cmd/godoc
 
-RUN cat ~/.config/fish/fishfile
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
 
 CMD fish
