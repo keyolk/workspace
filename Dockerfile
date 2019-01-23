@@ -46,21 +46,13 @@ FROM base
 RUN pacman -Sy --noconfirm llvm clang go python python-pip python2 python2-pip nodejs npm ruby
 
 # common tools
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk git openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr
-
-RUN pacman -Sy --noconfirm tmux
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr fakeroot git tmux fish parallel perl-libwww
 
 RUN pacman -Sy --noconfirm neovim \
   && pip install neovim \
   && pip2 install neovim
 
-RUN pacman -Sy --noconfirm fish
-RUN pacman -Sy --noconfirm docker
-RUN pacman -Sy --noconfirm terraform
-RUN pacman -Sy --noconfirm ansible
-RUN pacman -Sy --noconfirm vagrant
-RUN pacman -Sy --noconfirm parallel
-RUN pacman -Sy --noconfirm perl-libwww
+RUN pacman -Sy --noconfirm docker terraform ansible vagrant 
 
 RUN ln -sf /home /home1
 
@@ -88,6 +80,14 @@ ENV HOME /home/$user
 ENV GOROOT /usr/lib/go
 ENV GOPATH $GOPATH
 ENV SHELL /usr/bin/fish
+
+# Install yay for AUR
+RUN git clone https://aur.archlinux.org/yay.git \
+  && cd yay \
+  && makepkg -si --noconfirm
+
+# install bcc
+RUN yay -Sy --noconfirm bcc bcc-tools python-bcc python2-bcc
 
 RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin/config-clone | sh 
 
