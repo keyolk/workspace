@@ -1,5 +1,5 @@
 FROM base/archlinux AS base
-MAINTAINER Chanhun Jeong "chanhun.jeong@navercorp.com"
+MAINTAINER Chanhun Jeong "keyolk@gmail.com"
 
 # Optimise the mirror list
 RUN pacman --noconfirm -Syyu \
@@ -43,10 +43,10 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 FROM base
 
 # languages
-RUN pacman -Sy --noconfirm llvm clang go python python-pip python2 python2-pip nodejs npm ruby
+RUN pacman -Sy --noconfirm llvm clang go python python-pip python2 python2-pip nodejs npm ruby rust rust-racer ghc stack cabal-install
 
 # common tools
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr fakeroot git tmux fish parallel perl-libwww
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr fakeroot git tmux fish parallel perl-libwww man-pages msmtp msmtp-mta perf bpf libdwarf pandoc conntrack-tools whois translate-shell bzr
 
 RUN pacman -Sy --noconfirm neovim \
   && pip install neovim \
@@ -89,16 +89,19 @@ RUN git clone https://aur.archlinux.org/yay.git \
   && rm -rf ~/yay
 
 # install bcc
-RUN yay -Sy --noconfirm bcc bcc-tools python-bcc python2-bcc
+RUN yay -Sy --noconfirm bcc bcc-tools python-bcc python2-bcc pet-git tmux-xpanes ttyd
 
 RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin/config-clone | sh 
 
 RUN nvim +PlugInstall +qa || true
 RUN nvim +UpdateRemotePlugins +qa || true
 
+# install go tools
 RUN go get github.com/knqyf263/pet
 RUN go get github.com/gohugoio/hugo
 RUN go get golang.org/x/tools/cmd/godoc
+RUN go get github.com/namhyung/elftree
+RUN go get github.com/namhyung/das
 
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
 

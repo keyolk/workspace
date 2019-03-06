@@ -1,8 +1,9 @@
-IMAGE=keyolk
-CONTAINER=keyolk-work
+IMAGE=keyolk/workspace
+CONTAINER=workspace
 USER=irteam
 UID=500
 GID=500
+SHARED=/naver
 
 build: ## build
 	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) .
@@ -12,7 +13,7 @@ build/nocache: ## build
 clean: ## clean work env
 	docker rm -f $(CONTAINER)
 
-run:
+run: ## run container
 	docker run -tid \
 		--privileged \
 		--pid=host \
@@ -21,12 +22,11 @@ run:
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
-		-v /usr/local/sbin/cilookup:/usr/local/sbin/cilookup \
-		-v /usr/local/sbin/iplookup:/usr/local/sbin/iplookup \
-		-v /naver:/naver \
+		-v /usr/local/sbin:/user/local/sbin \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v /var/run/nscd:/var/run/nscd \
 		-v /lib/modules:/lib/modules \
+		-v $(SAHRED):$(SHARED) \
 		--name $(CONTAINER) \
 		$(IMAGE)
 
