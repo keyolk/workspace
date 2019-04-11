@@ -67,7 +67,6 @@ RUN groupadd -g $gid $user \
   && echo "$user ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
 RUN pacman -Sy --noconfirm tcpdump wireshark-cli \
-  && groupadd wireshark \
   && usermod -a -G wireshark $user \
   && setcap 'CAP_NET_RAW+eip CAP_NET_ADMIN+eip' /usr/bin/dumpcap \
   && chgrp wireshark /usr/bin/dumpcap \
@@ -95,13 +94,6 @@ RUN curl -Lks https://raw.githubusercontent.com/keyolk/config/master/.config/bin
 
 RUN nvim +PlugInstall +qa || true
 RUN nvim +UpdateRemotePlugins +qa || true
-
-# install go tools
-RUN go get github.com/knqyf263/pet
-RUN go get github.com/gohugoio/hugo
-RUN go get golang.org/x/tools/cmd/godoc
-RUN go get github.com/namhyung/elftree
-RUN go get github.com/namhyung/das
 
 RUN fish -c "cat ~/.config/fish/fishfile | fisher"
 
