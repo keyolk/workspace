@@ -22,6 +22,8 @@ run: ## run container
 		--pid=host \
 		--net=host \
 		-e REMOTE_USER=$(USER) \
+		-e GOROOT=/usr/lib/go \
+		-e GOPATH=/naver/go \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
 		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
@@ -39,7 +41,7 @@ attach: ## attach to work env
 	docker attach $(CONTAINER)
 
 sync: ## sync repo
-	git add -A && git commit -m "updated" && git push origin master
+	git add -A && git commit -m "updated" && git push -u origin master
 
 help: ## This help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9/_-]+:.*?## / {sub("\\\\n",sprintf("\n%22c"," "), $$2);printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)

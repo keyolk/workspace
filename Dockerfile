@@ -76,8 +76,6 @@ USER $user
 WORKDIR /home/$user
 
 ENV HOME /home/$user
-ENV GOROOT /usr/lib/go
-ENV GOPATH $HOME/.go
 ENV SHELL /usr/bin/fish
 ENV EDITOR /usr/bin/nvim
 
