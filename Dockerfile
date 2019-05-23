@@ -1,4 +1,5 @@
-FROM base/archlinux AS base
+FROM archlinux/base AS base
+
 MAINTAINER Chanhun Jeong "keyolk@gmail.com"
 
 # Optimise the mirror list
@@ -46,7 +47,7 @@ FROM base
 RUN pacman -Sy --noconfirm llvm clang go python python-pip python2 python2-pip nodejs npm ruby rust rust-racer ghc stack cabal-install
 
 # common tools
-RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr fakeroot git tmux fish parallel perl-libwww man-pages msmtp msmtp-mta perf bpf libdwarf pandoc conntrack-tools whois translate-shell bzr cron
+RUN pacman -Sy --noconfirm wget curl ca-certificates sudo ctags cscope make powerline powerline-fonts valgrind gawk openssh ripgrep vi vim man fzf jq openbsd-netcat cmake bind-tools net-tools bat tldr fakeroot git tmux fish parallel perl-libwww man-pages msmtp msmtp-mta perf bpf libdwarf pandoc conntrack-tools whois translate-shell bzr cron inetutils
 
 RUN pacman -Sy --noconfirm neovim \
   && pip install neovim \
