@@ -32,6 +32,7 @@ run: ## run container
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-v /var/run/nscd:/var/run/nscd \
 		-v /lib/modules:/lib/modules \
+		-v /sys/fs/cgroup:/sys/fs/cgroup \
 		-v $(SHARED):$(SHARED) \
 		--name $(CONTAINER) \
 		$(IMAGE)
