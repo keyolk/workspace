@@ -6,9 +6,9 @@ GID=500
 SHARED=/naver
 
 build: ## build
-	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) .
+	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) -f arch/Dockerfile .
 build/nocache: ## build
-	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) --no-cache .
+	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) -f arch/Dockerfile --no-cache .
 
 push:
 	docker push $(IMAGE)
