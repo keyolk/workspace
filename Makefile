@@ -1,9 +1,11 @@
+CONFIG=https://github.com/keyolk/config
+SECRET=https://github.com/keyolk/secret
 IMAGE=keyolk/workspace
+
 CONTAINER=workspace
-USER=irteam
+USER=keyolk
 UID=500
 GID=500
-SHARED=/naver
 
 build: ## build
 	docker build -t $(IMAGE) --build-arg user=$(USER) --build-arg uid=$(UID) --build-arg gid=$(GID) -f arch/Dockerfile .
@@ -22,18 +24,10 @@ run: ## run container
 		--pid=host \
 		--net=host \
 		-e REMOTE_USER=$(USER) \
-		-e GOROOT=/usr/lib/go \
-		-e GOPATH=/naver/go \
 		-v /etc/ssh/ssh_config:/etc/ssh/ssh_config \
-		-v /etc/krb5.conf:/etc/krb5.conf \
 		-v /etc/nsswitch.conf:/etc/nsswitch.conf \
-		-v /usr/local/sbin:/usr/local/sbin \
-		-v /opt/nbp:/opt/nbp \
-		-v /var/run/docker.sock:/var/run/docker.sock \
-		-v /var/run/nscd:/var/run/nscd \
 		-v /lib/modules:/lib/modules \
 		-v /sys/fs/cgroup:/sys/fs/cgroup \
-		-v $(SHARED):$(SHARED) \
 		--name $(CONTAINER) \
 		$(IMAGE)
 
